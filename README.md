@@ -1,179 +1,174 @@
-## Toward a more useful keyboard
+## 脚本整理融合
 
-Steve Losh's [Modern Space Cadet][modern-space-cadet] is an inspiration.
-It opened my eyes to the fact that there's a more useful keyboard hidden inside the vanilla QWERTY package that most of us have tolerated for all these years.
-This repo represents my nascent quest to unleash that more useful keyboard.
+感谢 [jasonrudolph](https://github.com/jasonrudolph/keyboard) 分享出来的hammperspoon脚本.
+代码在[github](https://github.com/xujiazhe/keyboard/tree/xujiazhe)上
+mac的应用窗口和应用切换功能太弱.
+	在win下
+		win+数. 切换任务栏上的窗口 !
+		win+方向键调整当前窗口 !
 
-At first, this might sound no different than the typical Emacs/Vim/\<Every-Other-Editor> tweakfest.
-But it is.
-I'm not talking about honing my editor-of-choice.
-I'm not talking about pimping out my shell.
-I want a more useful keyboard _everywhere_.
-Whether I'm in my editor, in the terminal, in the browser, or in Keynote,
-I want a more useful keyboard.
+## 功能列表
 
-And ideally, I want the _same_ (more useful) keyboard in every app.
-Ubiquitous keyboarding.
-Muscle memory.
-[Don't make me think][don't-make-me-think].
+- [切换应用](#切换应用)   Fn/opt + 数字/字母 -> 切换/启动 应用
+- [窗口调整](#窗口调整)   Fn + sdfe 也可调整
+- [karabiner配置](#karabiner配置)  键位映射和space模式
+- [一些APP下的功能](#一些APP下的功能) 在一些app下的特别功能
+- [SD模式](#SD模式) 双手帖键盘的时候, 就是好用啊
 
-How do I go to the beginning of the line in this app?
-The same way I go to the beginning of the line in _every_ app!
-Don't make me think.
 
-How do I go to the top of the file/screen/page in this app?
-The same way I...
-Well, you get the point.
+### 切换应用
 
-## More useful (for me)
+Fn/Alt  +  数字/符号/大小写字母 切换应用
 
-> **cus·tom·ize** (_verb_): to modify or build according to individual or personal specifications or preference [[dictionary.com][customize]]
+在 hammerspoon/app_launch_key.lua 文件中, 这两个配置表, 是 键<-->应用 关联表
 
-Any customization is, by definition, personal.
-While I find that these customizations yield a more-useful keyboard for me, they might not feel like a win for you.
+<u>摁住opt, 敲下2后, 就是idea, 在敲下2, 如果idea的窗口有多个, 就切换idea的窗口, 这个功能需要HyperSwitch配合, 设置alt+`是应用窗口切换</u>
 
-## Features
+*hammerspoon/app_name.lua 应用的  名字  和 文件名切换*
 
-- [Access <kbd>control</kbd> and <kbd>escape</kbd> on the home row](#a-more-useful-caps-lock-key)
-- [Navigate (up/down/left/right) via the home row](#super-duper-mode)
-- [Navigate to previous/next word via the home row](#super-duper-mode)
-- [Arrange windows via the home row](#window-layout-mode)
-- [Enable other commonly-used actions on or near the home row](#miscellaneous-goodness)
-- [Format text as Markdown](#markdown-mode)
-- [Launch commonly-used apps via global keyboard shortcuts](#hyper-key-for-quickly-launching-apps)
-- [And more...](#miscellaneous-goodness)
+```lua
+local fn_app_key = {
+    a = "Sublime Text",
+    b = "Typora",
+    B = "GitBook Editor",
+    v = "钉钉",
+    q = "QQ",
+    g = "Postman",
+    ['1'] = "Be Focused",
+    ['2'] = "Reminders",
+    ['3'] = "日历",
+    ['4'] = "Hammerspoon",
+    ['`'] = "屏幕共享",
+    ['t'] = "Sequel Pro"
+}
 
-### A more useful caps lock key
+local alt_app_key = {
+    ['1'] = 'iTerm',
+    ['!'] = "Terminal",
+    ['2'] = 'IntelliJ IDEA',
+    ['@'] = "Atom",
+    ['3'] = 'Safari',
+    ['#'] = 'Google Chrome',
+    ['4'] = 'PyCharm',
+    ['5'] = 'DataGrip',
 
-By repurposing the anachronistic <kbd>caps lock</kbd> key, we can make <kbd>control</kbd> and <kbd>escape</kbd> accessible via the home row.
+    f = 'Notes',
+    e = 'Finder',
+    E = 'Microsoft Excel',
+    v = '微信',
 
-- Tap <kbd>caps lock</kbd> for <kbd>escape</kbd>
-- Hold <kbd>caps lock</kbd> for <kbd>control</kbd>
+    [';'] = 'Photos',
+    ['\''] = 'MPlayerX',
+    [','] = '系统偏好设置'
+}
+```
 
-📣 Shout-out to [@arbelt](https://github.com/arbelt) and [@jasoncodes](https://github.com/jasoncodes) for [the implementation](https://github.com/jasonrudolph/keyboard/commit/01a7a5bd8a1e521756d1ec34769119ead5eee0b3). ⚡️🍻🌟
+### 窗口调整
 
-### (S)uper (D)uper Mode
+1. Fn + sdfe 灵活调整窗口 类似 win + 方向键
+  - sdfe 就当方向键, 摁e, 窗口就往上走, 恩 是走到上面去 !
 
-To activate, push the <kbd>s</kbd> and <kbd>d</kbd> keys simultaneously and hold them down. Now you're in (S)uper (D)uper Mode. It's like a secret keyboard _inside_ your keyboard. (Whoa.) It's optimized for keeping you on the home row, or very close to it. Now you can:
+2. 按下 <kbd>control</kbd> + <kbd>F12</kbd> 进入 操作窗口模式. 比如要把窗口 左半屏, 摁下 <kbd>control</kbd> + <kbd></kbd>, 然后 <kbd>h</kbd>.
+  - 半屏操作  <kbd>edsf</kbd>  上下左右半屏
+  - 斜半屏<kbd>SF</kdb>   左40%, 右60%
+  - 田角屏 <kbd>wrxv</kbd> 上左/上右/下左/下右
+  - 居中/全屏 <kbd>space</kbd><kbd>g/enter</kbd>
+  - 左右显示器 <kbd>←</kbd> <kbd>→</kbd>
+  - 下个显示器 <kbd>n</kbd>
+  - 摁 <kbd>esc</kbd> 退出窗口操作模式
 
-- Use <kbd>h</kbd> / <kbd>j</kbd> / <kbd>k</kbd> / <kbd>l</kbd> for **left**/**down**/**up**/**right** respectively
-- Use <kbd>a</kbd> for <kbd>option</kbd> (AKA <kbd>alt</kbd>)
-- Use <kbd>f</kbd> for <kbd>command</kbd>
-- Use <kbd>space</kbd> for <kbd>shift</kbd>
-- Use <kbd>a</kbd> + <kbd>j</kbd> / <kbd>k</kbd> for <kbd>page down</kbd> / <kbd>page up</kbd>
-- Use <kbd>i</kbd> / <kbd>o</kbd> to move to the previous/next tab
-- Use <kbd>u</kbd> / <kbd>p</kbd> to go to the first/last tab (in most apps)
-- Use <kbd>a</kbd> + <kbd>h</kbd> / <kbd>l</kbd> to move to previous/next word (in most apps)
+
+
+[<img src="https://cloud.githubusercontent.com/assets/2988/22397114/715cc12e-e538-11e6-9dcd-b3447af0d9dd.png" alt="Window Layout Mode Keybindings (1)" width="400"/>](https://cloud.githubusercontent.com/assets/2988/22397114/715cc12e-e538-11e6-9dcd-b3447af0d9dd.png) [<img src="https://cloud.githubusercontent.com/assets/2988/22397111/45672fe6-e538-11e6-905d-5b0234e290bb.png" alt="Window Layout Mode Keybindings (2)" width="400"/>](https://cloud.githubusercontent.com/assets/2988/22397111/45672fe6-e538-11e6-905d-5b0234e290bb.png)
+
+### karabiner配置
+
+*针对不同的键盘设备可有不同的配置.*
+
+- caps_lock     ->   left_control
+- left_control   ->    删除 / Fn
+
+
+1. 按住space, 进入spacebar模式, 该模式下的  键位映射有
+
+  - <kbd>esdf</kbd> ->方向键
+  - <kbd>wrxv</kbd> -> home, end, pageup, pagedown
+  - <kbd>\`</kbd>, <kbd>1-9,0,-,=</kbd>-> ESC,   F1 ~ F12
+  - <kbd>b</kbd> -> 空格,   <kbd>z</kbd> -> ESC
+
+2. 快键 就是单独短时按下
+
+  - left_cmd   ->    方向键下
+  - left_opt     ->    方向键上
+  - left_ctrl     ->    enter
+  - 双shift       ->    caps_lock
+
+
+### 一些APP下的功能
+
+
+1. 我用台式机工作, 笔记本开会, 两台机器之间有时候远程桌面操作,  微信/钉钉 在笔记本上常开.
+   在台式机上摁下  Fn/opt + v的时候, 是打开 远程窗口(台式机) 上的 微信/钉钉
+
+2. 在Finder, Reminder, 备忘录中 cmd + 1 是toggle边栏.
+3. 在终端 alt + h/l 前/后删词, iterm2
+
+
+### SD模式
+
+原脚本库的功能
+
+同时按住 <kbd>s</kbd> and <kbd>d</kbd> 就进入了SD模式, 就进入了键盘的另一种使用模式.
+
+-  <kbd>h</kbd> / <kbd>j</kbd> / <kbd>k</kbd> / <kbd>l</kbd> 分别对应  **左**/**下**/**上**/**右**
+-  <kbd>a</kbd> for <kbd>option</kbd> (AKA <kbd>alt</kbd>)
+-  <kbd>f</kbd> for <kbd>command</kbd>
+-  <kbd>space</kbd> for <kbd>shift</kbd>
+-  <kbd>a</kbd> + <kbd>j</kbd> / <kbd>k</kbd> for <kbd>page down</kbd> / <kbd>page up</kbd>
+-  <kbd>i</kbd> / <kbd>o</kbd>  前后标签
+-  <kbd>u</kbd> / <kbd>p</kbd> 起终标签 (在大多数应用中)
+-  <kbd>a</kbd> + <kbd>h</kbd> / <kbd>l</kbd> 前后 词 (in most apps)
 
 [<img width="400" alt="(S)uper (D)uper Mode Keybindings" src="https://cloud.githubusercontent.com/assets/2988/22397420/f2b3e346-e53e-11e6-97bb-9db71f86994b.png">](https://cloud.githubusercontent.com/assets/2988/22397420/f2b3e346-e53e-11e6-97bb-9db71f86994b.png)
 
 📣 Shout-out to [Karabiner's Simultaneous vi Mode](https://github.com/tekezo/Karabiner/blob/05ca98733f3e3501e0679814c3795d1cb57e177f/src/core/server/Resources/include/checkbox/simultaneouskeypresses_vi_mode.xml#L4-L10) for providing the inspiration for (S)uper (D)uper Mode. ⌨:neckbeard:✨
 
-### Window Layout Mode
 
-Quickly arrange and resize windows in common configurations, using keyboard shortcuts that are on or near the home row.
 
-Use <kbd>control</kbd> + <kbd>s</kbd> to turn on Window Layout Mode. Then, use any shortcut below to make windows do your bidding. For example, to send the window left, hit <kbd>control</kbd> + <kbd>s</kbd>, and then hit <kbd>h</kbd>.
-
-- Use <kbd>h</kbd> to send window left (left half of screen)
-- Use <kbd>j</kbd> to send window down (bottom half of screen)
-- Use <kbd>k</kbd> to send window up (top half of screen)
-- Use <kbd>l</kbd> to send window right (right half of screen)
-- Use <kbd>shift</kbd> + <kbd>h</kbd> to send window to left 40% of screen
-- Use <kbd>shift</kbd> + <kbd>l</kbd> to send window to right 60% of screen
-- Use <kbd>i</kbd> to send window to upper left quarter of screen
-- Use <kbd>o</kbd> to send window to upper right quarter of screen
-- Use <kbd>,</kbd> to send window to lower left quarter of screen
-- Use <kbd>.</kbd> to send window to lower right quarter of screen
-- Use <kbd>space</kbd> to send window to center of screen
-- Use <kbd>enter</kbd> to resize window to fill the screen
-- Use <kbd>n</kbd> to send window to the next monitor
-- Use <kbd>←</kbd> to send window to the monitor on the left (if there is one)
-- Use <kbd>→</kbd> to send window to the monitor on the right (if there is one)
-- Use <kbd>control</kbd> + <kbd>s</kbd> to exit Window Layout Mode without moving any windows
-
-[<img src="https://cloud.githubusercontent.com/assets/2988/22397114/715cc12e-e538-11e6-9dcd-b3447af0d9dd.png" alt="Window Layout Mode Keybindings (1)" width="400"/>](https://cloud.githubusercontent.com/assets/2988/22397114/715cc12e-e538-11e6-9dcd-b3447af0d9dd.png) [<img src="https://cloud.githubusercontent.com/assets/2988/22397111/45672fe6-e538-11e6-905d-5b0234e290bb.png" alt="Window Layout Mode Keybindings (2)" width="400"/>](https://cloud.githubusercontent.com/assets/2988/22397111/45672fe6-e538-11e6-905d-5b0234e290bb.png)
-
-### Markdown Mode
-
-Perform common [Markdown](https://daringfireball.net/projects/markdown/syntax)-formatting tasks anywhere that you're editing text (e.g., in a GitHub comment, in your editor, in your email client).
-
-Use <kbd>control</kbd> + <kbd>m</kbd> to turn on Markdown Mode. Then, use any shortcut below to perform an action. For example, to format the selected text as bold in Markdown, hit <kbd>control</kbd> + <kbd>m</kbd>, and then <kbd>b</kbd>.
-
-- Use <kbd>b</kbd> to wrap the currently-selected text in double asterisks ("B" for "Bold")
-
-    Example: `**selection**`
-
-- Use <kbd>c</kbd> to wrap the currently-selected text in backticks ("C" for "Code")
-
-    Example: `` `selection` ``
-
-- Use <kbd>i</kbd> to wrap the currently-selected text in single asterisks ("I" for "Italic")
-
-    Example: `*selection*`
-
-- Use <kbd>s</kbd> to wrap the currently-selected text in double tildes ("S" for "Strikethrough")
-
-    Example: `~~selection~~`
-
-- Use <kbd>l</kbd> to convert the currently-selected text to an inline link, using a URL from the clipboard ("L" for "Link")
-
-    Example: `[selection](clipboard)`
-
-- Use <kbd>control</kbd> + <kbd>m</kbd> to exit Markdown Mode without performing any actions
-
-### Hyper key for quickly launching apps
-
-macOS doesn't have a native <kbd>hyper</kbd> key. But thanks to Karabiner-Elements, we can [create our own](karabiner/karabiner.json). In this setup, we'll use the <kbd>right option</kbd> key as our <kbd>hyper</kbd> key.
-
-With a new modifier key defined, we open a whole world of possibilities. I find it especially useful for providing global shortcuts for launching apps.
-
-#### Choose your own apps
-
-Hyper Mode ships with the default keybindings below, but you'll likely want to personalize this setup. See [`hammerspoon/hyper-apps-defaults.lua`](hammerspoon/hyper-apps-defaults.lua) for instructions on configuring shortcuts to launch *your* most commonly-used apps.
-
-#### Default app keybindings
-
-- <kbd>hyper</kbd> + <kbd>a</kbd> to open iTunes ("A" for "Apple Music")
-- <kbd>hyper</kbd> + <kbd>b</kbd> to open Google Chrome ("B" for "Browser")
-- <kbd>hyper</kbd> + <kbd>c</kbd> to open Slack ("C for "Chat")
-- <kbd>hyper</kbd> + <kbd>d</kbd> to open [Remember The Milk](https://www.rememberthemilk.com/) ("D" for "Do!" ... or "Done!")
-- <kbd>hyper</kbd> + <kbd>e</kbd> to open [Atom](https://atom.io) ("E" for "Editor")
-- <kbd>hyper</kbd> + <kbd>f</kbd> to open Finder ("F" for "Finder")
-- <kbd>hyper</kbd> + <kbd>g</kbd> to open [Mailplane](http://mailplaneapp.com/) ("G" for "Gmail")
-- <kbd>hyper</kbd> + <kbd>s</kbd> to open [Slack](https://slack.com/downloads/osx) ("S" for "Slack")
-- <kbd>hyper</kbd> + <kbd>t</kbd> to open [iTerm2](https://www.iterm2.com/) ("T" for "Terminal")
-
-### Miscellaneous goodness
-
-- Use <kbd>control</kbd> + <kbd>-</kbd> (dash) to split iTerm2 panes horizontally
-- Use <kbd>control</kbd> + <kbd>|</kbd> (pipe) split iTerm2 panes vertically
-- Use <kbd>control</kbd> + <kbd>h</kbd> / <kbd>j</kbd> / <kbd>k</kbd> / <kbd>l</kbd> to move left/down/up/right by one pane in iTerm2
-- Use <kbd>control</kbd> + <kbd>u</kbd> to delete to the start of the line
-- Use <kbd>control</kbd> + <kbd>;</kbd> to delete to the end of the line
-- Use <kbd>option</kbd> + <kbd>h</kbd> / <kbd>l</kbd> to delete the previous/next word
-
-## Dependencies
-
-This setup is honed and tested with the following dependencies.
+## 依赖环境
 
 - macOS Sierra, 10.12
 - [Karabiner-Elements 0.91.7][karabiner]
 - [Hammerspoon 0.9.52][hammerspoon]
+- [HyperSwitch][hyperswitch]
 
-## Installation
 
-1. Grab the bits
 
-    ```sh
-    git clone https://github.com/jasonrudolph/keyboard.git ~/.keyboard
+## 安装使用
 
-    cd ~/.keyboard
+1. 下载代码
 
-    script/setup
-    ```
+   ```sh
+   git clone https://github.com/jasonrudolph/keyboard.git ~/.keyboard
 
-2. Enable accessibility to allow Hammerspoon to do its thing [[screenshot]](screenshots/accessibility-permissions-for-hammerspoon.png)
+   cd ~/.keyboard
+
+   script/setup
+   ```
+
+2. 如果有自己hammerspoon脚本 或 karabiner.json, 自己做好整合哈. 使用后果自负.
+
+3. Enable accessibility to allow Hammerspoon to do its thing [[screenshot]](screenshots/accessibility-permissions-for-hammerspoon.png)
+
+4. 这个脚本有点bug, 能撑一个小时, 失灵了就 Fn/opt + shift + r, 重载一下 ^^.
+
+## 开发
+
+1. lua项目入口脚本 init.lua 导入相应的功能模块
+2. Fn + 4 可打开 hammerspoon 的 console, 可以查看日志, 输入语句
+
+
+
 
 ## TODO
 
@@ -182,9 +177,10 @@ This setup is honed and tested with the following dependencies.
     - Double-tap option to mute/unmute microphone
 
 [customize]: http://dictionary.reference.com/browse/customize
-[don't-make-me-think]: http://en.wikipedia.org/wiki/Don't_Make_Me_Think
+[don't-make-me-think]: http://en.wikipedia.org/wiki/Don&amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;amp;#39;t_Make_Me_Think
 [karabiner]: https://github.com/tekezo/Karabiner-Elements
 [hammerspoon]: http://www.hammerspoon.org
 [hammerspoon-releases]: https://github.com/Hammerspoon/hammerspoon/releases
+[hyperswitch]: https://bahoom.com/hyperswitch
 [modern-space-cadet]: http://stevelosh.com/blog/2012/10/a-modern-space-cadet
 [modern-space-cadet-key-repeat]: http://stevelosh.com/blog/2012/10/a-modern-space-cadet/#controlescape

@@ -1,16 +1,6 @@
 local log = hs.logger.new('init.lua', 'debug')
 
--- Use Control+` to reload Hammerspoon config
-hs.hotkey.bind({'ctrl'}, '`', nil, function()
-  hs.reload()
-end)
 
-keyUpDown = function(modifiers, key)
-  -- Un-comment & reload config to log each keystroke that we're triggering
-  -- log.d('Sending keystroke:', hs.inspect(modifiers), key)
-
-  hs.eventtap.keyStroke(modifiers, key, 0)
-end
 
 -- Subscribe to the necessary events on the given window filter such that the
 -- given hotkey is enabled for windows that match the window filter and disabled
@@ -22,22 +12,48 @@ end
 --
 -- Returns nothing.
 enableHotkeyForWindowsMatchingFilter = function(windowFilter, hotkey)
-  windowFilter:subscribe(hs.window.filter.windowFocused, function()
-    hotkey:enable()
-  end)
+    windowFilter:subscribe(hs.window.filter.windowFocused, function()
+        hotkey:enable()
+    end)
 
-  windowFilter:subscribe(hs.window.filter.windowUnfocused, function()
-    hotkey:disable()
-  end)
+    windowFilter:subscribe(hs.window.filter.windowUnfocused, function()
+        hotkey:disable()
+    end)
+end
+switchName = require("keyboard.app_name")
+
+keyUpDown = function(modifiers, key)
+    -- Un-comment & reload config to log each keystroke that we're triggering
+     log.d('Sending keystroke:', hs.inspect(modifiers), key)
+    hs.eventtap.keyStroke(modifiers, key, 0)
 end
 
-require('keyboard.control-escape')
-require('keyboard.delete-words')
-require('keyboard.hyper')
-require('keyboard.markdown')
-require('keyboard.microphone')
-require('keyboard.panes')
-require('keyboard.super')
-require('keyboard.windows')
+FnKeyCodeJumpRange = function (keyCode)
+    -- 96 - 126 在ASCII键盘布局下 摁下好像都自带Fn  hs.keycodes.map[keyCode]  -- 除了 108 110 112
+    -- eisu, kana, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, forwarddelete, help, home, end, pagedown, pageup, left, right, down, up
+    if keyCode >= 96 and keyCode <= 126 then
+        return true
+    end
+    return false
+end
+--require('keyboard.3_left_hand.ctrl-enter')
+--require('keyboard.3_left_hand.alt-up')
+--require('keyboard.3_left_hand.cmd-down')
+require('keyboard.app_spec_fn')
 
-hs.notify.new({title='Hammerspoon', informativeText='Ready to rock 🤘'}):send()
+require("keyboard.app_launch_key")
+require('keyboard.windows_ops')
+require('keyboard.system_func')
+--require("keyboard.clipboard")
+
+
+--require('keyboard.5_right_hand')
+
+-- 1 切换应用
+-- 2 程序窗口管理  半/移
+
+-- 手边方向键  caps 2 esc
+
+-- 切换到屏幕共享的
+---剪贴板
+--- casp to esc
