@@ -4,41 +4,43 @@ local log = hs.logger.new('app_launch_key.lua', 'debug')
 --local application = require "hs.application"
 
 local fn_app_key = {
-    a = "Sublime Text",
+    a = "Atom",
     b = "Typora",
-    B = "GitBook Editor",
+    D = 'Activity Monitor',
     v = "钉钉",
-
+    c = 'Charles',
     q = "QQ",
     g = "Postman",
 
-    ['1'] = "Be Focused",
-    ['2'] = "Reminders",
-    ['3'] = "日历",
-    ['4'] = "Hammerspoon",
+    ['4'] = "Be Focused",
+    ['3'] = 'Reminders',
+    ['1'] = "Hammerspoon",
     ['`'] = "屏幕共享",
     ['t'] = "Sequel Pro",
     ['x'] = "XMind",
     ['r'] = "redis"
-}
+} -- abdvcqgtxr
 
 local alt_app_key = {
     ['1'] = 'iTerm',
     ['!'] = "Terminal",
     ['2'] = 'IntelliJ IDEA',
-    ['@'] = "Atom",
+    ['@'] = "Sublime Text",
     ['3'] = 'Google Chrome',
     ['#'] = 'Safari',
     ['4'] = 'PyCharm',
     ['$'] = 'DataGrip',
     ['r'] = '预览',
+    --['g'] = 'google chrome canary',
 
     f = 'Notes',
+    g = '日历',
+    -- cC
+
     e = 'Finder',
     E = 'Microsoft Excel',
     v = '微信',
-
-    D = 'Activity Monitor',
+    b = "GitBook Editor",
 
     w = 'Microsoft Word',
     W = 'AliWangwang',
@@ -51,7 +53,6 @@ local alt_app_key = {
     [';'] = 'Photos',
     ['\''] = 'MPlayerX',
     [','] = '系统偏好设置',
-    c = 'Charles',
     k = '迅雷'
 }
 
@@ -60,8 +61,6 @@ local laptop_apps = {} --{ "钉钉", "微信" }
 hs.application.enableSpotlightForNameSearches(true);
 
 -- 进入状态了后 再摁原键
---
---
 local in_mac_pro = hs.host.localizedName() == 'xjziMac'
 
 local targetAppToggleIn = false  -- 上一个切换的程序 是 切进来了吗?
@@ -126,7 +125,7 @@ local function fnOrAltCatcher(event)
     local ckey = event:getCharacters(true)
     local keyCode = event:getKeyCode()
 
-    if FnKeyCodeJumpRange(keyCode) then return false end
+    if FnKeyCodeInRange(keyCode) then return false end
 
     if targetAppToggleIn and focusedAppWinCnt > 1 then
         if last_app_key == ckey then
@@ -137,13 +136,6 @@ local function fnOrAltCatcher(event)
             last_app_key = ckey
             hyper_trans = false
         end
-        --event:setKeyCode(hs.keycodes.map['`'])
-        --event:setFlags({ "alt" })
-        --local keycode = event:getKeyCode()
-        --print("keycode = ", keycode)
-        --keyUpDown({ "alt"}, '`')
-        --return true, {}
-        --return false
     end
 
     local appName = flags:contain({ "fn" }) and fn_app_key[ckey] or flags:contain({ "alt" }) and alt_app_key[ckey]
@@ -161,7 +153,10 @@ local function fnOrAltCatcher(event)
         return true, {}
     end
 
-    if ckey == 'R' then hs.reload() end
+    if ckey == 'R' then
+        hs.reload()
+        return true, {}
+    end
     return false
 end
 
@@ -170,7 +165,7 @@ fnAltAppTapper:start()
 
 
 local modifierDownHander = function(evt)
-    local flags = evt:getFlags()
+    --local flags = evt:getFlags()
     last_app_key = {}
     targetAppToggleIn = false
     hyper_trans = false
@@ -201,4 +196,4 @@ end
 local statusMessage = t()
 
 
-return fnAltAppTapper
+return { endfnAltAppTapper = fnAltAppTapper, modifierDownHander = modifierDownHander }

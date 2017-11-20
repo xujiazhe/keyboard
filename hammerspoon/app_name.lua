@@ -22,7 +22,7 @@ local file_app = {
     'iTerm', 'iTerm2',
     '屏幕共享', 'Screen Sharing',
     'AliWangwang', '阿里旺旺',
-    'Postman', "/Users/xujiazhe/Applications/Chrome Apps.localized/Default fhbjgbiflinjbdggehcddcbncdddomop.app",
+    --'Postman', "/Users/xujiazhe/Applications/Chrome Apps.localized/Default fhbjgbiflinjbdggehcddcbncdddomop.app",
     '/Applications/iTunes.app/Contents/MacOS/iTunes', 'iTunes'
 }
 

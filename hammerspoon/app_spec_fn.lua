@@ -5,12 +5,14 @@ local appMenuItem = {
     ["Finder"] = { "显示", "显示边栏" },
     ["Reminders"] = { "显示", "显示边栏" },
     ["Notes"] = { "显示", "显示文件夹" },
+    ["calendar"] = { "显示", "显示日历列表" },
     ["Typora"] = { "View", "File Tree" }
 }
 local appMenuItem2 = {
     ["Finder"] = { "显示", "隐藏边栏" },
     ["Reminders"] = { "显示", "隐藏边栏" },
-    ["Notes"] = { "显示", "隐藏文件夹" }
+    ["Notes"] = { "显示", "隐藏文件夹" },
+    ["calendar"] = { "显示", "隐藏日历列表" }
 }
 local function cmdFunction(event)
     local ckey = event:getCharacters(true)
