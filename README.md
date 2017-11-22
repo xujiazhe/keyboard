@@ -85,7 +85,7 @@ local alt_app_key = {
 
 *针对不同的键盘设备可有不同的配置.*
 
-- caps_lock     ->   left_control
+- caps_lock     ->   right_control
 - left_control   ->    删除 / Fn
 
 

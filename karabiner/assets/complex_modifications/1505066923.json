@@ -2,10 +2,30 @@
   "title": "1. 左手闪键 Ctrl->enter, Cmd->down, Opt->up",
   "rules": [
     {
-      "description": "Post return_or_enter if left_control is pressed alone.",
+      "description": "Post return_or_enter if right_control is pressed alone. left_control alone to  delete_or_backspace",
       "manipulators": [
         {
           "type": "basic",
+          "from": {
+            "key_code": "right_control",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_control"
+            }
+          ],
+          "to_if_alone": [
+            {
+              "key_code": "return_or_enter"
+            }
+          ]
+        },
+        {
           "from": {
             "key_code": "left_control",
             "modifiers": {
@@ -21,10 +41,12 @@
           ],
           "to_if_alone": [
             {
-              "key_code": "return_or_enter"
+              "key_code": "delete_or_backspace"
             }
-          ]
+          ],
+          "type": "basic"
         }
+
       ]
     },
     {

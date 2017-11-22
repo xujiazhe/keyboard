@@ -34,6 +34,7 @@ local alt_app_key = {
     --['g'] = 'google chrome canary',
 
     f = 'Notes',
+    F = '日历',
     g = '日历',
     -- cC
 
