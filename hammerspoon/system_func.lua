@@ -33,9 +33,13 @@ local lookuptable = {
 function applicationWatcher(appName, eventType, appObject)
     --modifierDownHander()
     APPNAME = "Screen Sharing"
+    APPNAME2 = "parallels Desktop"
     --APPNAME = "Finder"
     tappName = switchName(appName)
     if appName ~= APPNAME and tappName ~= APPNAME then
+        return
+    end
+    if appName ~= APPNAME2 and tappName ~= APPNAME2 then
         return
     end
 
