@@ -13,34 +13,6 @@
                 },
                 "rules": [
                     {
-                        "description": "SpaceFN: Space+b to Space (hold to repeat)",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
-                                    }
-                                ],
-                                "from": {
-                                    "key_code": "b",
-                                    "modifiers": {
-                                        "optional": [
-                                            "any"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "spacebar"
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "SpaceFN: Space+[esdf] to Up, Left, Down, Right",
                         "manipulators": [
                             {
@@ -135,7 +107,6 @@
                                 ],
                                 "type": "basic"
                             },
-
                             {
                                 "conditions": [
                                     {
@@ -248,7 +219,6 @@
                                 ],
                                 "type": "basic"
                             },
-
                             {
                                 "conditions": [
                                     {
@@ -274,7 +244,6 @@
                                 ],
                                 "type": "basic"
                             },
-
                             {
                                 "conditions": [
                                     {
@@ -519,7 +488,6 @@
                                 ],
                                 "type": "basic"
                             },
-
                             {
                                 "conditions": [
                                     {
@@ -579,8 +547,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -602,8 +570,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -625,8 +593,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -639,7 +607,7 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code": "grave_accent_and_tilde"
+                                        "key_code": "escape"
                                     }
                                 ],
                                 "type": "basic"
@@ -648,8 +616,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -671,8 +639,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -694,8 +662,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -717,8 +685,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -740,8 +708,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -763,8 +731,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -786,8 +754,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -809,8 +777,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -832,8 +800,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -855,8 +823,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -878,8 +846,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
@@ -901,8 +869,8 @@
                                 "conditions": [
                                     {
                                         "name": "spacefn_mode",
-                                        "type": "variable_if",
-                                        "value": 1
+                                        "type": "variable_unless",
+                                        "value": 0
                                     }
                                 ],
                                 "from": {
