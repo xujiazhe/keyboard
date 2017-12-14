@@ -6,7 +6,6 @@ function hs.window.moveScreen(win, step)
     local currentScreen = win:screen()
     local allScreens = hs.screen.allScreens()
     local screenLen = #hs.screen.allScreens()
-
     local currentScreenIndex = hs.fnutils.indexOf(allScreens, currentScreen)
     local nextScreenIndex = (currentScreenIndex + screenLen + step - 1) % screenLen + 1
 
@@ -86,7 +85,7 @@ local function WinOpsCatcher(event)
             else winLno[cWinId] = lno
             end
             winFrame.w = screenFrame.w / 2;
-        end
+    end
         win:setFrame(winFrame);
     elseif ckey == 'f' then
         if (winFrame.x + winFrame.w) < (screenFrame.x + screenFrame.w) then

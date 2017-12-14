@@ -20,7 +20,7 @@ enableHotkeyForWindowsMatchingFilter = function(windowFilter, hotkey)
         hotkey:disable()
     end)
 end
-switchName = require("keyboard.app_name")
+require("keyboard.app_name")
 
 keyUpDown = function(modifiers, key)
     -- Un-comment & reload config to log each keystroke that we're triggering
@@ -44,16 +44,6 @@ require('keyboard.app_spec_fn')
 require("keyboard.app_launch_key")
 require('keyboard.windows_ops')
 require('keyboard.system_func')
+
 --require("keyboard.clipboard")
-
-
 --require('keyboard.5_right_hand')
-
--- 1 切换应用
--- 2 程序窗口管理  半/移
-
--- 手边方向键  caps 2 esc
-
--- 切换到屏幕共享的
----剪贴板
---- casp to esc

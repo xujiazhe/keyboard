@@ -1,19 +1,23 @@
 local log = hs.logger.new('app_spec_fn.lua', 'debug')
 --local wins = require('windows')
 
-local appMenuItem = {
+local AppMenuDict = {
     ["Finder"] = { "显示", "显示边栏" },
     ["Reminders"] = { "显示", "显示边栏" },
     ["Notes"] = { "显示", "显示文件夹" },
-    ["calendar"] = { "显示", "显示日历列表" },
-    ["Typora"] = { "View", "File Tree" }
+    ["Calendar"] = { "显示", "显示日历列表" },
+    ["Typora"] = { "显示", "文件树视图" },
+    ["Safari"] = { "显示", "显示阅读列表边栏" }
 }
-local appMenuItem2 = {
+local AppMenuDict2 = {
     ["Finder"] = { "显示", "隐藏边栏" },
     ["Reminders"] = { "显示", "隐藏边栏" },
     ["Notes"] = { "显示", "隐藏文件夹" },
-    ["calendar"] = { "显示", "隐藏日历列表" }
+    ["Calendar"] = { "显示", "隐藏日历列表" },
+    ["Typora"] = { "View", "File Tree" },
+    ["Safari"] = { "显示", "隐藏阅读列表边栏" }
 }
+
 local function cmdFunction(event)
     local ckey = event:getCharacters(true)
     if ckey ~= '1' then
@@ -22,19 +26,23 @@ local function cmdFunction(event)
 
     local win = hs.window.focusedWindow()
     local app = win:application()
-    local appName = app:name()
+    local UIName = app:name()
+    startName = getStartName(UIName) or UIName
+    print("startName" , startName)
 
     -- hs.application.launchOrFocus("Safari")
     -- local safari = hs.appfinder.appFromName("Safari")
     -- local str_default = {"开发", "用户代理", "Default (Automatically Chosen)"}
-    appName = switchName(appName) or appName
-    local menu1 = appMenuItem[appName]
-    local menu2 = appMenuItem2[appName]
+    local menu1 = AppMenuDict[startName]
+    local menu2 = AppMenuDict2[startName]
 
-    local menu_exsits = (menu1 and app:findMenuItem(menu1) and menu1) or (menu2 and app:findMenuItem(menu2) and menu2)
+    local exist_menu = menu1 and app:findMenuItem(menu1) and menu1
+    if not exist_menu then
+        exist_menu = menu2 and app:findMenuItem(menu2) and menu2
+    end
 
-    if menu_exsits then
-        app:selectMenuItem(menu_exsits)
+    if exist_menu then
+        app:selectMenuItem(exist_menu)
         return true, {}
     end
     -- print(default, ie10, chrome)
@@ -95,9 +103,8 @@ end
 
 local function appSpecialFunction(event)
     local ckey = event:getCharacters(true)
-    local appName = hs.application.frontmostApplication():name()
-    local tappName = switchName(appName) or appName
-    if tappName == 'Notes' or appName == 'Notes' and ckey == '\t' then
+    local UIName = hs.application.frontmostApplication():name()
+    if UIName == '备忘录' and ckey == '\t' then
         hs.eventtap.keyStrokes("    ")
         return true, {}
     end

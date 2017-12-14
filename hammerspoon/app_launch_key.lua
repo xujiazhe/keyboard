@@ -8,6 +8,11 @@ local fn_app_key = {
     b = "Typora",
     D = 'Activity Monitor',
     v = "钉钉",
+    k = "Karabiner-EventViewer",
+    K = "Karabiner-Elements",
+    w = 'YoudaoNote',
+    W= 'Evernote',
+
     c = 'Charles',
     q = "QQ",
     g = "Postman",
@@ -18,7 +23,8 @@ local fn_app_key = {
     ['`'] = "屏幕共享",
     ['t'] = "Sequel Pro",
     ['x'] = "XMind",
-    ['r'] = "redis"
+    ['r'] = "redis",
+    ['i'] = '脚本编辑器'
 } -- abdvcqgtxr
 
 local alt_app_key = {
@@ -34,8 +40,9 @@ local alt_app_key = {
     --['g'] = 'google chrome canary',
 
     f = 'Notes',
-    F = '日历',
-    g = '日历',
+    F = 'Stickies',
+    C = '日历',
+    c = 'HandShaker',
     -- cC
 
     e = 'Finder',
@@ -50,12 +57,22 @@ local alt_app_key = {
     n = 'NeteaseMusic',
     N = '百度音乐',
     ['['] = 'App Store',
-    [']'] = 'iTunes音乐',
+    [']'] = 'iTunes',
     [';'] = 'Photos',
     ['\''] = 'MPlayerX',
     [','] = '系统偏好设置',
     k = '迅雷'
 }
+
+function timeReminder()
+    keyUpDown({ 'alt', 'shift' }, 'C')
+    keyUpDown({ 'alt' }, 'C')
+    keyUpDown({ 'fn' }, '3')
+    hs.alert("不跑偏 抓重点!")
+    hs.timer.doAfter(1 * 30 * 60, timeReminder)
+end
+hs.timer.doAfter(1 * 30 * 60, timeReminder)
+
 
 
 local laptop_apps = {} --{ "钉钉", "微信" }
@@ -71,27 +88,22 @@ local hyper_trans = false
 
 ---toggleApp
 ---切换应用
----@param targetAppName string 名字
+---@param UIName string 名字
 ---@return boolean, number  改目标应用的窗口 是不是切进来了, 活跃的窗口数量是多少
-local function toggleApp(targetAppName)
-    local switch_name = switchName(targetAppName)
+local function toggleApp(Name)
+    local UIName = getUIName(Name) or Name
+    local startName = getStartName(UIName) or UIName
 
-    local app_a = hs.appfinder.appFromName(targetAppName)
-    local app_b = hs.application.get(switch_name)
-    local running_app = app_a or app_b
+    local runningApp = hs.appfinder.appFromName(UIName) or hs.application.get(UIName)
 
-    if not running_app then
-        hs.application.launchOrFocus(targetAppName)
-        if switch_name then
-            hs.application.launchOrFocus(switch_name)
-        end
-        -- hs.application.open(_name)
-        -- if tname then hs.application.open(tname) end
+    if not runningApp then
+        print("1")
+        hs.application.launchOrFocus(startName)
         return true, 1
     end
 
-    local mainwin = running_app:mainWindow()
-    local wins = running_app:allWindows()
+    local mainwin = runningApp:mainWindow()
+    local wins = runningApp:allWindows()
 
     if mainwin then
         if mainwin == hs.window.focusedWindow() then
@@ -104,18 +116,13 @@ local function toggleApp(targetAppName)
             return true, #wins
         end
     else
-        hs.application.open(targetAppName)
-        if switch_name then
-            hs.application.open(switch_name)
-        end
+        hs.application.open(startName)
         return true, #wins
-        -- application.launchOrFocus(tname)
     end
 end
 
 
 local function fnOrAltCatcher(event)
-    --local keycode = event:getKeyCode()
     local flags = event:getFlags()
 
     if not flags then return false end

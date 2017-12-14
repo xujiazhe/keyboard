@@ -10,10 +10,9 @@ mac的应用窗口和应用切换功能太弱.
 ## 功能列表
 
 - [切换应用](#切换应用)   Fn/opt + 数字/字母 -> 切换/启动 应用
-- [窗口调整](#窗口调整)   Fn + sdfe 也可调整
+- [窗口调整](#窗口调整)   Fn + sdfe 调整
 - [karabiner配置](#karabiner配置)  键位映射和space模式
 - [一些APP下的功能](#一些APP下的功能) 在一些app下的特别功能
-- [SD模式](#SD模式) 双手帖键盘的时候, 就是好用啊
 
 
 ### 切换应用
@@ -62,24 +61,13 @@ local alt_app_key = {
     [','] = '系统偏好设置'
 }
 ```
-
+Fn键功能图![Fn键功能图](screenshots/keyboard-layout-alt.png)
+Alt键功能图![Alt键功能图](screenshots/keyboard-layout-fn.png)
 ### 窗口调整
 
 1. Fn + sdfe 灵活调整窗口 类似 win + 方向键
   - sdfe 就当方向键, 摁e, 窗口就往上走, 恩 是走到上面去 !
 
-2. 按下 <kbd>control</kbd> + <kbd>F12</kbd> 进入 操作窗口模式. 比如要把窗口 左半屏, 摁下 <kbd>control</kbd> + <kbd></kbd>, 然后 <kbd>h</kbd>.
-  - 半屏操作  <kbd>edsf</kbd>  上下左右半屏
-  - 斜半屏<kbd>SF</kdb>   左40%, 右60%
-  - 田角屏 <kbd>wrxv</kbd> 上左/上右/下左/下右
-  - 居中/全屏 <kbd>space</kbd><kbd>g/enter</kbd>
-  - 左右显示器 <kbd>←</kbd> <kbd>→</kbd>
-  - 下个显示器 <kbd>n</kbd>
-  - 摁 <kbd>esc</kbd> 退出窗口操作模式
-
-
-
-[<img src="https://cloud.githubusercontent.com/assets/2988/22397114/715cc12e-e538-11e6-9dcd-b3447af0d9dd.png" alt="Window Layout Mode Keybindings (1)" width="400"/>](https://cloud.githubusercontent.com/assets/2988/22397114/715cc12e-e538-11e6-9dcd-b3447af0d9dd.png) [<img src="https://cloud.githubusercontent.com/assets/2988/22397111/45672fe6-e538-11e6-905d-5b0234e290bb.png" alt="Window Layout Mode Keybindings (2)" width="400"/>](https://cloud.githubusercontent.com/assets/2988/22397111/45672fe6-e538-11e6-905d-5b0234e290bb.png)
 
 ### karabiner配置
 
@@ -103,6 +91,16 @@ local alt_app_key = {
   - left_ctrl     ->    enter
   - 双shift       ->    caps_lock
 
+#### 图示
+初始布局![image](screenshots/keyboard-layout0.png)
+按住spacebar进入spacebar模式 ![image](screenshots/keyboard-layout1.0.png)
+按一下w切换到鼠标模式 ![image](screenshots/keyboard-layout1.1.1.png)
+按住a进入滚轮模式 ![image](screenshots/keyboard-layout1.1.2.png)
+spacebar模式和fn结合的功能图 ![image](screenshots/keyboard-layout1.2.1.png)
+spacebar模式和alt结合的功能图 ![image](screenshots/keyboard-layout1.2.2.png)
+系统中的键设置 ![image](screenshots/keyboard-layout1.2.3.1.png)
+spacebar模式和ctrl结合的功能图 ![image](screenshots/keyboard-layout1.2.3.png)
+###### TODO 一般键盘有按键冲突 比如  Spacebar+Fn+ -号 不能减小声音
 
 ### 一些APP下的功能
 
@@ -114,24 +112,9 @@ local alt_app_key = {
 3. 在终端 alt + h/l 前/后删词, iterm2
 
 
-### SD模式
-
-原脚本库的功能
-
-同时按住 <kbd>s</kbd> and <kbd>d</kbd> 就进入了SD模式, 就进入了键盘的另一种使用模式.
-
--  <kbd>h</kbd> / <kbd>j</kbd> / <kbd>k</kbd> / <kbd>l</kbd> 分别对应  **左**/**下**/**上**/**右**
--  <kbd>a</kbd> for <kbd>option</kbd> (AKA <kbd>alt</kbd>)
--  <kbd>f</kbd> for <kbd>command</kbd>
--  <kbd>space</kbd> for <kbd>shift</kbd>
--  <kbd>a</kbd> + <kbd>j</kbd> / <kbd>k</kbd> for <kbd>page down</kbd> / <kbd>page up</kbd>
--  <kbd>i</kbd> / <kbd>o</kbd>  前后标签
--  <kbd>u</kbd> / <kbd>p</kbd> 起终标签 (在大多数应用中)
--  <kbd>a</kbd> + <kbd>h</kbd> / <kbd>l</kbd> 前后 词 (in most apps)
-
-[<img width="400" alt="(S)uper (D)uper Mode Keybindings" src="https://cloud.githubusercontent.com/assets/2988/22397420/f2b3e346-e53e-11e6-97bb-9db71f86994b.png">](https://cloud.githubusercontent.com/assets/2988/22397420/f2b3e346-e53e-11e6-97bb-9db71f86994b.png)
-
 📣 Shout-out to [Karabiner's Simultaneous vi Mode](https://github.com/tekezo/Karabiner/blob/05ca98733f3e3501e0679814c3795d1cb57e177f/src/core/server/Resources/include/checkbox/simultaneouskeypresses_vi_mode.xml#L4-L10) for providing the inspiration for (S)uper (D)uper Mode. ⌨:neckbeard:✨
+
+
 
 
 
@@ -171,7 +154,8 @@ local alt_app_key = {
 
 
 ## TODO
-
+##### TODO 跳屏循环顺序不太对
+##### TODO 菜单键(激活菜单后, 1234分别对应第几个选项)
 - Add [#13](https://github.com/jasonrudolph/keyboard/pull/13) to [features](#features):
     - Hold option for push-to-talk/push-to-mute
     - Double-tap option to mute/unmute microphone

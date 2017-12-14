@@ -1,4 +1,4 @@
-local file_app = {
+local UI_Terminal_Names = {
     '备忘录', 'Notes',
     '便笺', 'Stickies',
     '词典', 'Dictionary',
@@ -6,6 +6,7 @@ local file_app = {
     '国际象棋', 'Chess',
     '计算器', 'Calculator',
     '日历', 'Calendar',
+    '有道云笔记', 'YoudaoNote',
     '提醒事项', 'Reminders',
     '通讯录', 'Contacts',
     '图像捕捉', 'Image Capture',
@@ -19,12 +20,19 @@ local file_app = {
     '微信', 'WeChat',
     'Airmail 3', 'Airmail',
     '迅雷', 'Thunder',
-    'iTerm', 'iTerm2',
+    'iTerm2', 'iTerm',
     '屏幕共享', 'Screen Sharing',
-    'AliWangwang', '阿里旺旺',
+    '阿里旺旺', 'AliWangwang',
+    '脚本编辑器', 'Script Editor',
     --'Postman', "/Users/xujiazhe/Applications/Chrome Apps.localized/Default fhbjgbiflinjbdggehcddcbncdddomop.app",
-    '/Applications/iTunes.app/Contents/MacOS/iTunes', 'iTunes'
+    'iTunes', '/Applications/iTunes.app/Contents/MacOS/iTunes'
 }
+
+-- Finder中文件名字(系统中右上角应用的名字)
+-----界面显示和常用, 找活动窗口用
+
+-- 启动的名字/终端名字
+-----实际的启动名字
 
 ---translateName
 ---文件名和应用名 切换
@@ -34,14 +42,31 @@ local file_app = {
 ---@param name string
 ---@return string
 
-local function switchName(name)
+function getUIName(name)
     local map = { [1] = 1, [0] = -1 }
-    for index, sname in ipairs(file_app) do
+    for index, sname in ipairs(UI_Terminal_Names) do
         if sname == name then
-            return file_app[index + map[index % 2]]
+            if index % 2 == 0 then
+                return UI_Terminal_Names[index + map[index % 2]]
+            else
+                return nil
+            end
         end
     end
     return nil
 end
 
-return switchName
+function getStartName(name)
+    local map = { [1] = 1, [0] = -1 }
+    for index, sname in ipairs(UI_Terminal_Names) do
+        if sname == name then
+            if index % 2 == 1 then
+                return UI_Terminal_Names[index + map[index % 2]]
+            else
+                return nil
+            end
+        end
+    end
+    return nil
+end
+
