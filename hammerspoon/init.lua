@@ -30,7 +30,8 @@ end
 
 FnKeyCodeInRange = function (keyCode)
     -- 96 - 126 在ASCII键盘布局下 摁下好像都自带Fn  hs.keycodes.map[keyCode]  -- 除了 108 110 112
-    -- eisu, kana, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, forwarddelete, help, home, end, pagedown, pageup, left, right, down, up
+    -- eisu, kana, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, forwarddelete,
+    -- help, home, end, pagedown, pageup, left, right, down, up
     if keyCode >= 96 and keyCode <= 126 then
         return true
     end
@@ -45,5 +46,14 @@ require("keyboard.app_launch_key")
 require('keyboard.windows_ops')
 require('keyboard.system_func')
 
+function timeReminder()
+    -- keyUpDown({ 'alt', 'shift' }, 'C')
+    -- keyUpDown({ 'alt' }, 'C')
+    keyUpDown({ 'fn' }, '3')
+    keyUpDown({ 'fn' }, '2')
+    hs.alert("不跑偏 抓重点¡!")
+    hs.timer.doAfter(1 * 30 * 60, timeReminder)
+end
+hs.timer.doAfter(1 * 30 * 60, timeReminder)
 --require("keyboard.clipboard")
 --require('keyboard.5_right_hand')

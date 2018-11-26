@@ -38,7 +38,8 @@ local function WinOpsCatcher(event)
         return false
     end
     local ckey = event:getCharacters(true)
-    startNo, en = string.find("sdef", ckey)
+    startNo, en = string.find("sdefaz", ckey)
+    print(ckey)
     if not startNo then
         return false
     end
@@ -85,7 +86,7 @@ local function WinOpsCatcher(event)
             else winLno[cWinId] = lno
             end
             winFrame.w = screenFrame.w / 2;
-    end
+        end
         win:setFrame(winFrame);
     elseif ckey == 'f' then
         if (winFrame.x + winFrame.w) < (screenFrame.x + screenFrame.w) then
@@ -104,9 +105,26 @@ local function WinOpsCatcher(event)
             winFrame.w = screenFrame.w / 2;
         end
         win:setFrame(winFrame);
+    elseif ckey == 'a' then
+        winFrame.x = 0
+        winFrame.y = 23.1
+        winFrame.w = 1440 * 2
+        winFrame.h = 2560 - 23.1
+        print(hs.inspect(winFrame))
+        win:setFrame(winFrame);
+        print("print over¡")
+    elseif ckey == 'z' then
+        winFrame.w = winFrame.w - 20
+--        winFrame.x = -1680
+--        winFrame.y = 23.1
+--        winFrame.w = 1440 * 2 + 1680
+--        winFrame.h = 1440 + 1050 - 23.1
+        win:setFrame(winFrame);
+        print(hs.inspect(winFrame))
     else
         print("couldn't be here Fn+", ckey);
     end
+
     return true, {}
 end
 

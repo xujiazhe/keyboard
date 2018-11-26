@@ -4,23 +4,24 @@ local log = hs.logger.new('app_launch_key.lua', 'debug')
 --local application = require "hs.application"
 
 local fn_app_key = {
-    a = "Atom",
     b = "Typora",
     D = 'Activity Monitor',
-    v = "钉钉",
+    v = "微信",
     k = "Karabiner-EventViewer",
     K = "Karabiner-Elements",
     w = 'YoudaoNote',
-    W= 'Evernote',
+    W = 'Evernote',
 
     c = 'Charles',
     q = "QQ",
     g = "Postman",
 
-    ['4'] = "Be Focused",
-    ['3'] = 'Reminders',
     ['1'] = "Hammerspoon",
-    ['`'] = "屏幕共享",
+    ['2'] = 'Reminders',
+    ['3'] = 'Calendar',
+    ['4'] = "Be Focused",
+
+    --['`'] = "屏幕共享",
     ['t'] = "Sequel Pro",
     ['x'] = "XMind",
     ['r'] = "redis",
@@ -41,13 +42,12 @@ local alt_app_key = {
 
     f = 'Notes',
     F = 'Stickies',
-    C = '日历',
     c = 'HandShaker',
     -- cC
 
     e = 'Finder',
     E = 'Microsoft Excel',
-    v = '微信',
+    --v = 'WeChat',
     b = "GitBook Editor",
 
     w = 'Microsoft Word',
@@ -58,47 +58,34 @@ local alt_app_key = {
     N = '百度音乐',
     ['['] = 'App Store',
     [']'] = 'iTunes',
+    ['}'] = 'VLC',
     [';'] = 'Photos',
     ['\''] = 'MPlayerX',
     [','] = '系统偏好设置',
     k = '迅雷'
 }
 
-function timeReminder()
-    keyUpDown({ 'alt', 'shift' }, 'C')
-    keyUpDown({ 'alt' }, 'C')
-    keyUpDown({ 'fn' }, '3')
-    hs.alert("不跑偏 抓重点!")
-    hs.timer.doAfter(1 * 30 * 60, timeReminder)
-end
-hs.timer.doAfter(1 * 30 * 60, timeReminder)
-
-
-
-local laptop_apps = {} --{ "钉钉", "微信" }
 hs.application.enableSpotlightForNameSearches(true);
 
 -- 进入状态了后 再摁原键
-local in_mac_pro = hs.host.localizedName() == 'xjziMac'
 
 local targetAppToggleIn = false  -- 上一个切换的程序 是 切进来了吗?
-local focusedAppWinCnt = 0
-local last_app_key = ""
-local hyper_trans = false
+local focusedAppWinAmt = 0
+local lastAppKey = ""
+local hyperTrans = 0
 
 ---toggleApp
 ---切换应用
 ---@param UIName string 名字
 ---@return boolean, number  改目标应用的窗口 是不是切进来了, 活跃的窗口数量是多少
 local function toggleApp(Name)
-    local UIName = getUIName(Name) or Name
-    local startName = getStartName(UIName) or UIName
-
-    local runningApp = hs.appfinder.appFromName(UIName) or hs.application.get(UIName)
-
+    local uiName = getUIName(Name) or Name
+    local startName = getStartName(uiName) or uiName
+    local runningApp = hs.appfinder.appFromName(uiName) or hs.application.get(uiName)
+    log.f("uiName = %s", uiName)
     if not runningApp then
-        print("1")
-        hs.application.launchOrFocus(startName)
+        log.f(' runningApp = %s, startName = %s, uiName = %s', hs.inspect(runningApp), startName, uiName)
+        hs.application.launchOrFocus(startName) -- 虚拟机共享的软件
         return true, 1
     end
 
@@ -121,87 +108,148 @@ local function toggleApp(Name)
     end
 end
 
+local isSingleFnOrAlt = function(flags)
+    local cnt = 0
+    local shiftOn = 0
+    for _ in pairs(flags) do
+        cnt = cnt + 1
+    end
 
+    if flags:contain({ "shift" }) then
+        cnt = cnt - 1
+        shiftOn = 1
+    end
+
+    if cnt == 1 and flags:contain({ "alt" }) or flags:contain({ "fn" }) then
+        return shiftOn + 1
+    else
+        return false
+    end
+end
+
+---松开opt 或者 fn的效果
+---中断连续切换的状态 保持fn or opt hold on 就是保持状态, 切换其他 都是中断状态 除了shift
+---@param evt table
+local flagsChangedHander = function(evt)
+    local flags = evt:getFlags()
+    local ckey = evt:getKeyCode()
+
+    if not isSingleFnOrAlt(flags) then
+        return false
+    end
+
+    if ckey == hs.keycodes.map['shift'] then
+        return
+    end
+    if hyperTrans == 0 then return end
+
+    keyUpDown({}, 'escape')
+    lastAppKey = {}
+    targetAppToggleIn = false
+    hyperTrans = 0
+
+    return false
+end
+
+local message = require('keyboard.status-message')
+
+local function t()
+    local helpContent = 'fn app\n'
+    local cnt = 0
+    for key, appName in pairs(fn_app_key) do
+        cnt = cnt + 1
+        if cnt % 4 == 0 then
+            helpContent  = helpContent  .. '\n'
+        end
+        helpContent = helpContent  .. string.format('%3s  %-21s', key, appName)
+    end
+
+    helpContent = helpContent .. '\n\nalt app\n'
+    cnt = 0
+    for key, appName in pairs(alt_app_key) do
+        cnt = cnt + 1
+        if cnt % 4 == 0 then
+            helpContent  = helpContent  .. "\n"
+        end
+        helpContent = helpContent  .. string.format('%3s  %-21s', key, appName)
+    end
+
+    local statusMessage = message.new(helpContent)
+    return statusMessage
+end
+local statusMessage = t()
+
+
+local helpMsgCnt = 0
+---fnOrAltCatcher 切换应用程序的捕捉  Fn alt  加上了shift. 后松shift
+-- 摁下 单个的Fn/alt + 数字字母, 切换应用.
+-- 集体出来并激活焦点, 集体隐藏, 循环应用窗口.... 松开flag 就停止到相应的状态.
+-- 比如chrome有3个窗口, 处于未激活状态: 摁住alt, 摁下 5 次 3
+--     先chrome窗口集体出来, 消失, 然后开始循环窗口... 过程中, 松开alt就停止到相应的状态   需要配合 HyperSwitch
+--     有些符号自带 fn
+---@param event function
 local function fnOrAltCatcher(event)
     local flags = event:getFlags()
 
-    if not flags then return false end
-    if not flags:contain({ "alt" }) and not flags:contain({ "fn" }) then return false end
-    if flags:contain({ "alt", "fn" }) then return false end
-    if flags:contain({ 'cmd' }) or flags:contain({ 'ctrl' }) then return false end
+    if not isSingleFnOrAlt(flags) then
+        return false
+    end
 
     local ckey = event:getCharacters(true)
     local keyCode = event:getKeyCode()
+    if FnKeyCodeInRange(keyCode) then
+        return false
+    end
 
-    if FnKeyCodeInRange(keyCode) then return false end
+    log.f('\n\t\t targetAppToggleIn = %s, focusedAppWinAmt = %s, lastAppKey = %s, hyperTrans = %d \n',
+            targetAppToggleIn, focusedAppWinAmt, hs.inspect(lastAppKey), hyperTrans)
 
-    if targetAppToggleIn and focusedAppWinCnt > 1 then
-        if last_app_key == ckey then
-            hyper_trans = true
-            return true, { hs.eventtap.event.newKeyEvent({ "alt" }, '`', true) }
-        elseif last_app_key ~= ckey then
-            keyUpDown({}, 'escape')
-            last_app_key = ckey
-            hyper_trans = false
+    local appName = flags:contain({ "fn" }) and fn_app_key[ckey] or flags:contain({ "alt" }) and alt_app_key[ckey]
+    if not appName then
+        if ckey == 'R' then
+            hs.reload()
+            return true, {}
+        end
+        if ckey == '`' then
+            if helpMsgCnt % 2 == 0 then
+                statusMessage:show()
+            else
+                statusMessage:hide()
+            end
+            helpMsgCnt = helpMsgCnt + 1
+
+            return true, {}
+        end
+        flagsChangedHander(event)
+        return false
+    end
+    log.f("appName = '%s'", appName)
+
+    if targetAppToggleIn and focusedAppWinAmt > 1 then
+        if lastAppKey == ckey then
+            if hyperTrans < focusedAppWinAmt then
+                hyperTrans = hyperTrans + 1
+                return true, { hs.eventtap.event.newKeyEvent({ "alt" }, '`', true) } -- cmd + ` ok too
+            else
+                flagsChangedHander(event)
+            end
+        elseif lastAppKey ~= ckey then
+            flagsChangedHander(event)
+            lastAppKey = ckey
         end
     end
 
-    local appName = flags:contain({ "fn" }) and fn_app_key[ckey] or flags:contain({ "alt" }) and alt_app_key[ckey]
-    if in_mac_pro and hs.fnutils.contains(laptop_apps, appName) then
-        --fn_alt_tapper.left_modifier =
-        targetAppToggleIn, focusedAppWinCnt = toggleApp("屏幕共享")
-        --keyUpDown({}, 'escape')4
-        --hs.eventtap.event.newKeyEvent({ 'fn' }, '`', true):post()
-        return true, {}
-    end
-
-    if appName then
-        targetAppToggleIn, focusedAppWinCnt = toggleApp(appName)
-        last_app_key = ckey
-        return true, {}
-    end
-
-    if ckey == 'R' then
-        hs.reload()
-        return true, {}
-    end
-    return false
+    targetAppToggleIn, focusedAppWinAmt = toggleApp(appName)
+    lastAppKey = ckey
+    return true, {}
 end
 
 local fnAltAppTapper = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, fnOrAltCatcher)
 fnAltAppTapper:start()
 
+local flagTapper = hs.eventtap.new({ hs.eventtap.event.types.flagsChanged }, flagsChangedHander)
+flagTapper:start()
 
-local modifierDownHander = function(evt)
-    --local flags = evt:getFlags()
-    last_app_key = {}
-    targetAppToggleIn = false
-    hyper_trans = false
-    return false
-end
-
-local modifierTapper = hs.eventtap.new({ hs.eventtap.event.types.flagsChanged }, modifierDownHander)
-modifierTapper:start()
-
-
-
---local left_modifier = nil
---local left_key = nil
-local message = require('keyboard.status-message')
-
-local function t()
-    local helpContent = 'fn app\n'
-    for key, appName in pairs(fn_app_key) do
-        helpContent = helpContent .. "\n " .. key .. "  " .. appName
-    end
-    helpContent = helpContent .. '\n\nalt app'
-    for key, appName in pairs(alt_app_key) do
-        helpContent = helpContent .. "\n " .. key .. "  " .. appName
-    end
-    local statusMessage = message.new(helpContent)
-    return statusMessage
-end
-local statusMessage = t()
 
 
 return { endfnAltAppTapper = fnAltAppTapper, modifierDownHander = modifierDownHander }
