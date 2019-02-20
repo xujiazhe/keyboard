@@ -57,3 +57,19 @@ end
 hs.timer.doAfter(1 * 30 * 60, timeReminder)
 --require("keyboard.clipboard")
 --require('keyboard.5_right_hand')
+
+
+ins = hs.inspect
+-- 延时执行函数, 并切换到响应窗口
+function fn()
+    local his = hs.console.getHistory()
+    local statement = his[#his]
+    --f = loadstring(statement)
+    --print f
+end
+go = hs.timer.doAfter
+
+
+
+--hs.fnutils.each(hs.application.runningApplications(), function(app) print(app:title()) end)
+

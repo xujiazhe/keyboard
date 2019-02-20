@@ -28,6 +28,7 @@ local UI_Terminal_Names = {
     '活动监视器','Activity Monitor',
     '脚本编辑器', 'Script Editor',
     --'Postman', "/Users/xujiazhe/Applications/Chrome Apps.localized/Default fhbjgbiflinjbdggehcddcbncdddomop.app",
+    "Hammerspoon", "/Applications/Hammerspoon.app",
     'iTunes', '/Applications/iTunes.app/Contents/MacOS/iTunes'
 }
 

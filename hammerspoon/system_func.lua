@@ -35,6 +35,7 @@ function applicationWatcher(UIName, eventType, appObject)
     APPNAME = "Screen Sharing"
     APPNAME2 = "parallels Desktop"
     --APPNAME = "Finder"
+    -- hs.fnutils.contains
     startName = getStartName(UIName)
     if UIName ~= APPNAME and startName ~= APPNAME then
         return

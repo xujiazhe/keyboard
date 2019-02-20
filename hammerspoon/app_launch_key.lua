@@ -9,10 +9,11 @@ local fn_app_key = {
     v = "微信",
     k = "Karabiner-EventViewer",
     K = "Karabiner-Elements",
-    w = 'YoudaoNote',
+    w = 'automator',
     W = 'Evernote',
 
-    c = 'Charles',
+    c = 'Xcode',
+    --c = 'Charles',
     q = "QQ",
     g = "Postman",
 
@@ -21,7 +22,7 @@ local fn_app_key = {
     ['3'] = 'Calendar',
     ['4'] = "Be Focused",
 
-    --['`'] = "屏幕共享",
+    ['`'] = "sourceTree",
     ['t'] = "Sequel Pro",
     ['x'] = "XMind",
     ['r'] = "redis",
@@ -36,13 +37,14 @@ local alt_app_key = {
     ['3'] = 'Google Chrome',
     ['#'] = 'Safari',
     ['4'] = 'PyCharm',
-    ['$'] = 'DataGrip',
-    ['r'] = '预览',
+    ['$'] = 'WebStorm',
+    ['r'] = 'pdf expert',
     --['g'] = 'google chrome canary',
 
     f = 'Notes',
     F = 'Stickies',
     c = 'HandShaker',
+    o = 'OpenSCAD',
     -- cC
 
     e = 'Finder',
@@ -81,7 +83,7 @@ local hyperTrans = 0
 local function toggleApp(Name)
     local uiName = getUIName(Name) or Name
     local startName = getStartName(uiName) or uiName
-    local runningApp = hs.appfinder.appFromName(uiName) or hs.application.get(uiName)
+    local runningApp = hs.appfinder.appFromName(uiName) or hs.application.get(startName)
     log.f("uiName = %s", uiName)
     if not runningApp then
         log.f(' runningApp = %s, startName = %s, uiName = %s', hs.inspect(runningApp), startName, uiName)
@@ -210,7 +212,7 @@ local function fnOrAltCatcher(event)
             hs.reload()
             return true, {}
         end
-        if ckey == '`' then
+        if ckey == '`' and flags:contain({ "fn" })then
             if helpMsgCnt % 2 == 0 then
                 statusMessage:show()
             else
@@ -249,6 +251,21 @@ fnAltAppTapper:start()
 
 local flagTapper = hs.eventtap.new({ hs.eventtap.event.types.flagsChanged }, flagsChangedHander)
 flagTapper:start()
+
+FnKeyCodeInRange = function (keyCode)
+    -- 96 - 126 在ASCII键盘布局下 摁下好像都自带Fn  hs.keycodes.map[keyCode]  -- 除了 108 110 112
+    -- eisu, kana, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, forwarddelete,
+    -- help, home, end, pagedown, pageup, left, right, down, up
+    if keyCode >= 96 and keyCode <= 126 then
+        return true
+    end
+    return false
+end
+keyUpDown = function(modifiers, key)
+    -- Un-comment & reload config to log each keystroke that we're triggering
+     log.d('Sending keystroke:', hs.inspect(modifiers), key)
+    hs.eventtap.keyStroke(modifiers, key, 0)
+end
 
 
 
