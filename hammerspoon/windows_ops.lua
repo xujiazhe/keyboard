@@ -20,12 +20,14 @@ end
 
 local gi = debug.getinfo
 local cWinId = 0
-local winLno = { } -- 跳屏功能, 但有些窗口最小宽度大于半屏, 为了能sf跳屏, 有一个win重复状态的判断
+winLno = { } -- 跳屏功能, 但有些窗口最小宽度大于半屏, 为了能sf跳屏, 有一个win重复状态的判断
 local dl = { __index = function()
     return 0
 end }
 setmetatable(winLno, dl)
 
+local  model = false
+local MODEL = 3 --3   i(hs.screen.primaryScreen():name())
 ---WinOpsCatcher
 --- fn + sdef 操作当前窗口
 ---     上下左右 步幅易懂
@@ -45,8 +47,16 @@ local function WinOpsCatcher(event)
     end
     local win = hs.window.focusedWindow()
     local winFrame = win:frame()
-    local screenFrame = win:screen():frame()
+    local screen = win:screen()
+    local screenFrame = screen:frame()
     cWinId = win:id()
+
+
+    if  model == true and win:screen():id() == hs.screen.primaryScreen():id() then--'Color LCD' then
+        print("         model = ", model)
+        --screenFrame.x = screenFrame.x + 327-- TODO 1 左边
+        screenFrame.w = screenFrame.w - 327
+    end
 
     if ckey == 'e' then
         -- 上 上有空 补上; 上没空 空下;
@@ -106,23 +116,52 @@ local function WinOpsCatcher(event)
         end
         win:setFrame(winFrame);
     elseif ckey == 'a' then
+        local screeng = screen:fullFrame()
+        local menuHeight = screen:frame().y - screeng.y
         winFrame.x = 0
-        winFrame.y = 23.1
+        winFrame.y = menuHeight
         winFrame.w = 1440 * 2
-        winFrame.h = 2560 - 23.1
+        winFrame.h = 2560 - menuHeight
         print(hs.inspect(winFrame))
         win:setFrame(winFrame);
         print("print over¡")
     elseif ckey == 'z' then
-        winFrame.w = winFrame.w - 20
---        winFrame.x = -1680
---        winFrame.y = 23.1
---        winFrame.w = 1440 * 2 + 1680
---        winFrame.h = 1440 + 1050 - 23.1
-        win:setFrame(winFrame);
-        print(hs.inspect(winFrame))
+        if model then
+            model = false
+            return true, {}
+        end
+        local calendar = hs.appfinder.appFromName('com.apple.iCal')
+
+        calendar:activate()
+        calendar:selectMenuItem({ "显示", "隐藏日历列表" })  --TODO 激活后才能使用
+
+        local cwin = hs.fnutils.find(calendar:allWindows(), function(win)
+            if not win:isStandard() then return false end
+            if win:subrole() ~= "AXStandardWindow" then return false end
+            return true
+        end)
+        cwin:raise()
+
+        local cwinFrame = cwin:frame()
+
+        --local screenFrame = hs.screen'LCD':frame()
+        local screenFrame = hs.screen.primaryScreen():frame()
+        cwinFrame.y = screenFrame.y
+        cwinFrame.h = screenFrame.h
+        cwinFrame.w = 639
+        cwinFrame.x = screenFrame.x+screenFrame.w-327 -- 1
+        --cwinFrame.x = screenFrame.x
+        print("screenFrame = ", i(screenFrame))
+
+        print(i(cwin:setFrame(cwinFrame)));
+        print("cwinFrame = ", i(cwinFrame))
+
+        model = true
+
     else
         print("couldn't be here Fn+", ckey);
+        p(i(flags))
+        return false
     end
 
     return true, {}

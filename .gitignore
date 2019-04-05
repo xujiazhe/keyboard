@@ -1,2 +1,8 @@
 hammerspoon/hyper-apps.lua
 .idea
+hammerspoon/useless
+.gitignore
+test.py
+*/test.lua
+karabiner/assets
+karabiner/automatic_backups

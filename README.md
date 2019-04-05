@@ -61,8 +61,10 @@ local alt_app_key = {
     [','] = '系统偏好设置'
 }
 ```
-Fn键功能图![Fn键功能图](screenshots/keyboard-layout-alt.png)
-Alt键功能图![Alt键功能图](screenshots/keyboard-layout-fn.png)
+Fn键功能图  
+![Fn键功能图](screenshots/keyboard-layout-alt.png)  
+Alt键功能图  
+![Alt键功能图](screenshots/keyboard-layout-fn.png)  
 ### 窗口调整
 
 1. Fn + sdfe 灵活调整窗口 类似 win + 方向键
@@ -92,14 +94,23 @@ Alt键功能图![Alt键功能图](screenshots/keyboard-layout-fn.png)
   - 双shift       ->    caps_lock
 
 #### 图示
-初始布局![image](screenshots/keyboard-layout0.png)
-按住spacebar进入spacebar模式 ![image](screenshots/keyboard-layout1.0.png)
-按一下w切换到鼠标模式 ![image](screenshots/keyboard-layout1.1.1.png)
-按住a进入滚轮模式 ![image](screenshots/keyboard-layout1.1.2.png)
-spacebar模式和fn结合的功能图 ![image](screenshots/keyboard-layout1.2.1.png)
-spacebar模式和alt结合的功能图 ![image](screenshots/keyboard-layout1.2.2.png)
-系统中的键设置 ![image](screenshots/keyboard-layout1.2.3.1.png)
-spacebar模式和ctrl结合的功能图 ![image](screenshots/keyboard-layout1.2.3.png)
+初始布局  
+![image](screenshots/keyboard-layout0.png)  
+按住spacebar进入spacebar模式   
+![image](screenshots/keyboard-layout1.0.png)  
+按一下w切换到鼠标模式   
+![image](screenshots/keyboard-layout1.1.1.png)  
+按住a进入滚轮模式   
+![image](screenshots/keyboard-layout1.1.2.png)  
+spacebar模式和fn结合的功能图   
+![image](screenshots/keyboard-layout1.2.1.png)  
+spacebar模式和alt结合的功能图   
+![image](screenshots/keyboard-layout1.2.2.png)  
+系统中的键设置   
+![image](screenshots/keyboard-layout1.2.3.1.png)  
+spacebar模式和ctrl结合的功能图   
+![image](screenshots/keyboard-layout1.2.3.png)  
+
 ###### TODO 一般键盘有按键冲突 比如  Spacebar+Fn+ -号 不能减小声音
 
 ### 一些APP下的功能
@@ -147,14 +158,36 @@ spacebar模式和ctrl结合的功能图 ![image](screenshots/keyboard-layout1.2.
 
 ## 开发
 
-1. lua项目入口脚本 init.lua 导入相应的功能模块
-2. Fn + 4 可打开 hammerspoon 的 console, 可以查看日志, 输入语句
+hammerspoon是什么?
 
+    系统的api 和 动态库
+    lua壳和lua扩展, lua程序配置
+    程序界面和外壳
 
+hammerpoon的发展和结构
+
+    自带lua解释器
+    其path路径 和 运行路径
+
+调试开发
+
+    包路径
+        原来自带的路径
+        luarocks  库包
+    添加路径
+          local yourPath = '你自己的lua包路径'
+            package.path = yourPath .. '?.lua;' .. package.path;
+            require('init')  #加载入口脚本
+    装载
+        装载代码
+        /usr/local/bin/hs  执行注入
+    debug方法  自带的方法?
+    简写 hsa'Chrome'
+    动态注入
+        spoon.
 
 
 ## TODO
-##### TODO 跳屏循环顺序不太对
 ##### TODO 菜单键(激活菜单后, 1234分别对应第几个选项)
 - Add [#13](https://github.com/jasonrudolph/keyboard/pull/13) to [features](#features):
     - Hold option for push-to-talk/push-to-mute

@@ -1,6 +1,6 @@
 local hk = require "hs.hotkey"
 
-local alk = require("keyboard.app_launch_key")
+local alk = require("keyboard.app_window_switch")
 local fnAltAppTapper = alk.fnAltAppTapper
 local modifierDownHander = alk.modifierDownHander
 local windowFuncTapper = require('keyboard.windows_ops')
@@ -25,6 +25,37 @@ local lookuptable = {
     [hs.application.watcher.deactivated] = 0
 }
 
+--hs.window.filter.default:subscribe(hs.window.filter.windowDestroyed, function(window, appName)
+    --print("             ", window:title())
+    --print(i({
+    --    title   = window:title(),
+    --    app     = window:application():name(),
+    --    role    = window:role(),
+    --    subrole = window:subrole()
+    --}))
+--end)
+
+hs.window.filter.default:subscribe(hs.window.filter.windowFocused, function(window, appName)
+    local mousepoint = hs.mouse.getAbsolutePosition()
+    local winRect = window:frame()
+    if winRect.x <= mousepoint.x and mousepoint.x <= winRect.x+winRect.w and
+            winRect.y <= mousepoint.y and mousepoint.y <= winRect.y+winRect.h then
+        return
+    end
+    local winCentrePoint = hs.geometry.point(winRect.x + winRect.w/2, winRect.y + winRect.h/2)
+    hs.mouse.setAbsolutePosition(winCentrePoint)
+
+    --local color = { red = 255 / 255, green = 77 / 255, blue = 61 / 255, alpha = 1 }
+    --local circle = hs.drawing.circle(hs.geometry.rect(winCentrePoint.x-15, winCentrePoint.y-15, 30, 30))
+    --circle:setFillColor(color):setFill(true):setStrokeWidth(1):setLevel(hs.drawing.windowLevels.overlay):setStrokeColor(hs.drawing.color.white)
+    --circle:bringToFront(true)
+    --circle:show(0.15)
+
+    --local timer = hs.timer.doAfter(0.2, function()
+    --    circle:hide(0.15)
+    --    hs.timer.doAfter(0.2, function() circle:delete() end)
+    --end)
+end)
 ---applicationWatcher
 ---
 ---@param UIName string
@@ -34,6 +65,7 @@ function applicationWatcher(UIName, eventType, appObject)
     --modifierDownHander()
     APPNAME = "Screen Sharing"
     APPNAME2 = "parallels Desktop"
+
     --APPNAME = "Finder"
     -- hs.fnutils.contains
     startName = getStartName(UIName)
@@ -56,6 +88,7 @@ end
 local appWatcher = hs.application.watcher.new(applicationWatcher)
 appWatcher:start()
 
+return appWatcher
 -- 左右点按 bn
 -- elseif key == "b" then
 --     local currentpos = hs.mouse.getRelativePosition()

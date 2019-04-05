@@ -20,7 +20,7 @@ enableHotkeyForWindowsMatchingFilter = function(windowFilter, hotkey)
         hotkey:disable()
     end)
 end
-require("keyboard.app_name")
+require("keyboard.app_name_map")
 
 keyUpDown = function(modifiers, key)
     -- Un-comment & reload config to log each keystroke that we're triggering
@@ -42,7 +42,7 @@ end
 --require('keyboard.3_left_hand.cmd-down')
 require('keyboard.app_spec_fn')
 
-require("keyboard.app_launch_key")
+require("keyboard.app_window_switch")
 require('keyboard.windows_ops')
 require('keyboard.system_func')
 
@@ -59,15 +59,13 @@ hs.timer.doAfter(1 * 30 * 60, timeReminder)
 --require('keyboard.5_right_hand')
 
 
-ins = hs.inspect
 -- 延时执行函数, 并切换到响应窗口
-function fn()
+local function fn()
     local his = hs.console.getHistory()
     local statement = his[#his]
     --f = loadstring(statement)
     --print f
 end
-go = hs.timer.doAfter
 
 
 
